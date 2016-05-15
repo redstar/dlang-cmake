@@ -11,6 +11,8 @@ include(${CMAKE_ROOT}/Modules/CMakeDetermineCompiler.cmake)
 include(Platform/${CMAKE_SYSTEM_NAME}-C OPTIONAL)
 
 if(NOT CMAKE_D_COMPILER)
+  set(CMAKE_D_COMPILER_INIT NOTFOUND)
+
   # Prefer the environment variable DC
   if(NOT $ENV{DC} STREQUAL "")
     get_filename_component(CMAKE_D_COMPILER_INIT $ENV{DC} PROGRAM PROGRAM_ARGS CMAKE_D_FLAGS_ENV_INIT)
@@ -30,7 +32,7 @@ if(NOT CMAKE_D_COMPILER)
   endif()
 
   # Finally list compilers to try
-  if(NOT CMAKE_CXX_COMPILER_INIT)
+  if(NOT CMAKE_D_COMPILER_INIT)
     set(CMAKE_D_COMPILER_LIST dmd ldmd2 gdmd ldc2 gdc)
   endif()
 
