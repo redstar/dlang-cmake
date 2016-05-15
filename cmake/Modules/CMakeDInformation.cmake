@@ -4,6 +4,11 @@ else()
   set(CMAKE_D_OUTPUT_EXTENSION .obj)
 endif()
 
+# Load compiler-specific information.
+if(CMAKE_D_COMPILER_ID)
+  include(Compiler/${CMAKE_D_COMPILER_ID} OPTIONAL)
+endif()
+
 # This should be included before the _INIT variables are
 # used to initialize the cache.  Since the rule variables
 # have if blocks on them, users can still define them here.
