@@ -116,7 +116,7 @@ endif()
 # compile a D file into an object file
 if(NOT CMAKE_D_COMPILE_OBJECT)
   set(CMAKE_D_COMPILE_OBJECT
-    "<CMAKE_D_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -of<OBJECT> -c <SOURCE>")
+    "<CMAKE_D_COMPILER> <DEFINES> <FLAGS> -of<OBJECT> -c <SOURCE>")
 endif()
 
 if(NOT CMAKE_D_LINK_EXECUTABLE)
