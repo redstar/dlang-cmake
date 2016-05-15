@@ -11,9 +11,29 @@ include(${CMAKE_ROOT}/Modules/CMakeDetermineCompiler.cmake)
 include(Platform/${CMAKE_SYSTEM_NAME}-C OPTIONAL)
 
 if(NOT CMAKE_D_COMPILER)
-  # TODO: ENV DC?
-  # List compilers to try
-  set(CMAKE_D_COMPILER_LIST dmd ldmd2 gdmd ldc2 gdc)
+  # Prefer the environment variable DC
+  if(NOT $ENV{DC} STREQUAL "")
+    get_filename_component(CMAKE_D_COMPILER_INIT $ENV{DC} PROGRAM PROGRAM_ARGS CMAKE_D_FLAGS_ENV_INIT)
+    if(CMAKE_D_FLAGS_ENV_INIT)
+      set(CMAKE_D_COMPILER_ARG1 "${CMAKE_D_FLAGS_ENV_INIT}" CACHE STRING "First argument to D compiler")
+    endif()
+    if(NOT EXISTS ${CMAKE_D_COMPILER_INIT})
+      message(FATAL_ERROR "Could not find compiler set in environment variable DC:\n$ENV{DC}.\n${CMAKE_D_COMPILER_INIT}")
+    endif()
+  endif()
+
+  # Next prefer the generator specified compiler
+  if(CMAKE_GENERATOR_D)
+    if(NOT CMAKE_D_COMPILER_INIT)
+      set(CMAKE_D_COMPILER_INIT ${CMAKE_GENERATOR_D})
+    endif()
+  endif()
+
+  # Finally list compilers to try
+  if(NOT CMAKE_CXX_COMPILER_INIT)
+    set(CMAKE_D_COMPILER_LIST dmd ldmd2 gdmd ldc2 gdc)
+  endif()
+
   _cmake_find_compiler(D)
 else()
   _cmake_find_compiler_path(D)
@@ -71,3 +91,4 @@ configure_file(cmake/Modules/CMakeDCompiler.cmake.in
   )
 
 unset(__CMAKE_D_COMPILER_NAME)
+set(CMAKE_D_COMPILER_ENV_VAR "DC")
